@@ -43,11 +43,25 @@ io.on('connection', (socket) => {
   // 切断時
   socket.on('disconnect', () => {
     console.log('disconnected:', socket.id);
+    io.emit('deleteUser', socket.id);
   });
 
   // ユーザの参加
   socket.on('send', (message) => {
     console.log('send:', message);
+    message.socketid = socket.id;
     io.emit('send', message);
+  });
+
+  socket.on('rename', (data) => {
+    io.emit('rename', data);
+  });
+
+  socket.on('addUser', (data) => {
+    io.emit('addUser', data);
+  });
+
+  socket.on('sendProfile', (data) => {
+    io.emit('sendProfile', data);
   });
 });
