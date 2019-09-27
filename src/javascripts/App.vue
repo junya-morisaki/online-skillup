@@ -33,7 +33,7 @@
     <ul>
       <template v-for="user in userList">
         <li v-show="!(user.name==='管理者')"
-            v-bind:class="{deactive: !user.active}"
+            v-bind:class="{deactive: !user.active  }"
             class='sidebar-user'>
           {{user.name}}
           </li>
@@ -85,7 +85,7 @@ export default {
   created() {
     socket.on('connect', () => {
       console.log('connected!!!!');
-      const user = { name: socket.id, acrtive: true };
+      const user = { name: socket.id, active: true };
       // this.$data.userList[socket.id] = user;
       this.$set(this.$data.userList, socket.id, user);
       this.$data.name = socket.id;
