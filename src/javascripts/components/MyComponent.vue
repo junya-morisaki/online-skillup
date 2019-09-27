@@ -5,7 +5,7 @@
     <div class='name'>
       {{$props.name}}
     </div>
-    <div class='message'>
+    <div class='text'>
        {{ $props.message }}
     </div>
     <div class='time'>
@@ -28,23 +28,26 @@ export default {
 
 <style lang="scss" scoped>
 .msg {
-  font-size: 10px;
-  margin-bottom: 10px;
+  font-size: 15px;
+  margin-bottom: 25px;
 }
 
 .name {
   font-size: 0.5em;
+  color: #fff;
 }
 
-.message {
-  font-size: 1.5em;
+.text {
+  font-size: 1em;
   margin: 0.5em;
   padding: 0.3em;
   border: solid 1px;
   border-radius: 0.5em;
+  background-color: #fff;
 }
 
 .time {
-  font-size: 0.3em;
+  font-size: 0.5em;
+  color: #fff;
 }
 </style>

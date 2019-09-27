@@ -1,8 +1,9 @@
 <template>
   <div class="root">
+    <div class="header">
     <p>
       <img class="logo" src="../images/logo.jpg" alt="ロゴ">
-      <span class="sample">サンプルコード</span>
+
     </p>
     {{reactive}}
     <div class='form'>
@@ -23,13 +24,17 @@
     </div>
     </div>
 
+    </div>
+
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-sticked">
       <p>参加者リスト</p>
     <ul>
       <template v-for="user in userList">
-        <li v-show="!(user.name==='管理者')">
+        <li v-show="!(user.name==='管理者')"
+            v-bind:class="{deactive: !user.active}"
+            class='sidebar-user'>
           {{user.name}}
           </li>
       </template>
@@ -171,6 +176,7 @@ export default {
 <style lang="scss" scoped>
 .root {
   overflow-wrap: break-word;
+  font-family: serif;
 }
 
 ul {
@@ -180,10 +186,23 @@ ul {
 
 .logo {
   width: 40px;
+  margin-right: 50px;
 }
 
 .sample {
   color: $red;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: #fff;
+  min-width: 100vw;
 }
 
 .form {
@@ -198,17 +217,45 @@ ul {
 
 .container {
   display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 20px;
+}
+
+.sidebar {
+  background-color: #a0a0a0;
 }
 
 .sidebar-sticked {
   position: -webkit-sticky;
   position: sticky;
-  top: 10px;
-  // z-index: 1;
+  top: 100px; //上のフォーム分空ける
+}
+
+.sidebar-sticked ul::after {
+  content: '';
+  border-top: solid 1px;
+  display: block;
+}
+
+.sidebar-user {
+  border-top: solid 1px;
+  padding: 5px 0;
+}
+
+.deactive {
+  opacity: 0.3;
 }
 
 .chat {
-  width: 500px;
+  width: 600px;
+  background-color: #71beeb;
+}
+
+.chat::before {
+  content: '';
+  display: block;
+  height: 100px; //上のフォーム分の高さ
 }
 
 .chat-margin {
