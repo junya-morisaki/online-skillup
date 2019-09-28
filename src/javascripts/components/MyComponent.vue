@@ -39,8 +39,8 @@ export default {
 
 .text {
   font-size: 1em;
-  margin: 0.5em;
-  padding: 0.3em;
+  margin: 2%;
+  padding: 2%;
   border: solid 1px;
   border-radius: 0.5em;
   background-color: #fff;

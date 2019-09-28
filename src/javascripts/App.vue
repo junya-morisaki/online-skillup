@@ -72,10 +72,12 @@ export default {
   },
   data() {
     return {
-    // userList: { { socketid: {name:string, active: bool } }, ... }
+    // message: [{id: , text: , socketid: , time: ,  }, ...]
       message: [],
       text: '',
-      count: 0, // v-forのkey用
+      // v-forのkey用
+      count: 0,
+      // userList: { { socketid: {name:string, active: bool } }, ... }
       userList: { 'admin': { name: '管理者', active: true }},
       name: '',
       socketid: '',
@@ -83,34 +85,38 @@ export default {
     };
   },
   created() {
+    // 接続時
     socket.on('connect', () => {
       console.log('connected!!!!');
       const user = { name: socket.id, active: true };
-      // this.$data.userList[socket.id] = user;
       this.$set(this.$data.userList, socket.id, user);
       this.$data.name = socket.id;
       this.$data.socketid = socket.id;
       socket.emit('addUser', socket.id);
     });
 
+    // テキスト受信
     socket.on('send', (data) => {
-      // console.log(message);
       data.id = this.$data.count;
       this.$data.count++;
       this.$data.message.push(data);
     });
 
+    // ユーザ名変更を受信
     socket.on('rename', (data) => {
-      console.log(this.userList);
       this.$data.userList[data.socketid].name = data.name;
       // 再描画
       this.$data.reactive = ' ';
     });
 
+    // 新規ユーザが接続を受信
     socket.on('addUser', (data) => {
+      // 自分が発信したイベントでなければユーザリストに追加
       if (data !== socket.id) {
         const user = { name: data, active: true };
         this.$set(this.$data.userList, data, user);
+
+        // 新規接続したユーザに自分の情報を送る
         socket.emit('sendProfile', {
           socketid: socket.id,
           name: this.$data.name
@@ -118,9 +124,11 @@ export default {
       }
     });
 
+    // ユーザの切断を受信
     socket.on('deleteUser', (socketid) => {
       this.$data.userList[socketid].active = false;
 
+      // 退出通知のメッセージを追加
       const msg = {};
       msg.id = this.$data.count;
       this.$data.count++;
@@ -130,6 +138,7 @@ export default {
       this.$data.message.push(msg);
     });
 
+    // 自分より前に接続している人のデータを追加
     socket.on('sendProfile', (data) => {
       this.$data.userList[data.socketid] = { name: data.name, active: true };
       // 再描画
@@ -137,9 +146,7 @@ export default {
     });
   },
   methods: {
-    /**
-     * Enterボタンを押したとき
-     */
+
     onSubmit(e) {
       e.preventDefault();
       if (this.$data.text) {
